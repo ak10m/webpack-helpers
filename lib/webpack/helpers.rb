@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "webpack/helpers/version"
 
 module Webpack
