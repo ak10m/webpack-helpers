@@ -1,0 +1,53 @@
+# README
+
+## Run example
+
+    $ git clone https://github.com/ak10m/webpacky
+    $ cd webpacky/examples
+    $ docker-compose up rails
+
+Open http://localhost:3000
+
+## Installation
+
+Add this line to your application's Gemfile:
+
+```ruby
+gem 'webpacky'
+```
+
+And then execute:
+
+    $ bundle install
+
+Or install it yourself as:
+
+    $ gem install webpacky
+
+Optionally, you can run the generator:
+
+    $ rails generate webpacky:install
+
+
+## Usage
+
+### Webpack::DevServer
+
+* Webpack::DevServer.config.url
+* Webpack::DevServer.config.proxy_path
+* proxy to webpack-dev-server
+  * when config.proxy_path = falsey
+
+
+### Webpack::Manifest
+
+* Webpack::Manifest.config.url
+* Webpack::Manifest.config.cache
+
+### helper
+
+* javascript_bundle_tag
+* stylesheet_bundle_tag
+* image_bundle_tag
+
+
