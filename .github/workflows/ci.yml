@@ -1,0 +1,62 @@
+name: CI
+
+on: [push]
+
+jobs:
+  rubocop:
+    name: Rubocop
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Set up Ruby
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: '2.6.x'
+        architecture: 'x64'
+    - name: Set up Bundler
+      run: |
+        gem install bundler -v 2.1.3
+        bundle config path vendor/bundle
+        bundle lock
+        cat Gemfile.lock
+    - uses: actions/cache@v1
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-rubocop-gem-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-rubocop-gem-
+    - name: Bundle install
+      run: bundle install --jobs 4 --retry 3
+    - name: Run rubocop
+      run: bundle exec rubocop
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby:
+          - '2.5.x'
+          - '2.6.x'
+    steps:
+    - uses: actions/checkout@master
+    - name: Set up Ruby
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        architecture: 'x64'
+    - name: Set up Bundler
+      run: |
+        gem install bundler -v 2.1.3
+        bundle config path vendor/bundle
+        bundle lock
+    - uses: actions/cache@v1
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-ruby-${{ matrix.ruby }}-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-ruby-${{ matrix.ruby }}-
+    - name: Bundle install
+      run: bundle install --jobs 4 --retry 3
+    - name: Run test
+      run: bundle exec rake test
