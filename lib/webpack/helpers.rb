@@ -2,6 +2,7 @@
 
 require "webpack/helpers/version"
 require "webpack/dev_server"
+require "webpack/manifest"
 
 module Webpack
   module Helpers

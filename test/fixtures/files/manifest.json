@@ -1,0 +1,5 @@
+{
+  "script.js": "script-digest.js",
+  "style.css": "style-digest.css",
+  "image.svg": "image-digest.svg"
+}
