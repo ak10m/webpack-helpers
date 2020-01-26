@@ -38,6 +38,14 @@ jobs:
         ruby:
           - '2.5.x'
           - '2.6.x'
+        gemfile:
+          - rails_edge.gemfile
+          - rails_6_0.gemfile
+          - rails_5_2.gemfile
+          - rails_5_1.gemfile
+          - rails_5_0.gemfile
+    env:
+      BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}
     steps:
     - uses: actions/checkout@master
     - name: Set up Ruby
@@ -52,11 +60,11 @@ jobs:
         bundle lock
     - uses: actions/cache@v1
       with:
-        path: vendor/bundle
-        key: ${{ runner.os }}-ruby-${{ matrix.ruby }}-${{ hashFiles('**/Gemfile.lock') }}
+        path: gemfiles/vendor/bundle
+        key: ${{ runner.os }}-ruby-${{ matrix.ruby }}-${{ matrix.gemfile }}-${{ hashFiles('**/*.gemfile.lock') }}
         restore-keys: |
-          ${{ runner.os }}-ruby-${{ matrix.ruby }}-
-    - name: Bundle install
+          ${{ runner.os }}-ruby-${{ matrix.ruby }}-${{ matrix.gemfile }}-
+    - name: Bundle install ${{ matrix.gemfile }}
       run: bundle install --jobs 4 --retry 3
     - name: Run test
       run: bundle exec rake test
