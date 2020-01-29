@@ -2,7 +2,7 @@
 
 require "webpack/helpers"
 
-Webpacky.configure do |config|
+Webpack.configure do |config|
   config.dev_server.url = ENV.fetch("WEBPACK_DEV_SERVER_URL") { "http://0.0.0.0:8080" }
   config.dev_server.connect_timeout = ENV.fetch("WEBPACK_DEV_SERVER_CONNECT_TIMEOUT") { 0.1 }
   config.dev_server.proxy_path = ENV.fetch("WEBPACK_DEV_SERVER_PROXY_PATH") { "/webpack/" }
