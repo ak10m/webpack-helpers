@@ -32,6 +32,7 @@ class Webpack::HelpersTest < Minitest::Test
         assert_equal "/web/pack/script-digest.js", @helper.webpack_bundle_path("script.js")
         assert_equal "/web/pack/bundles/style-digest.css", @helper.webpack_bundle_path("style.css")
         assert_equal "https://cdn/images/logo-digest.svg", @helper.webpack_bundle_path("logo.svg")
+        assert_equal "/web/pack/manifest.json", @helper.webpack_bundle_path("manifest.json")
       end
     end
   end
@@ -46,6 +47,7 @@ class Webpack::HelpersTest < Minitest::Test
         assert_equal "script-digest.js", @helper.webpack_bundle_path("script.js")
         assert_equal "/bundles/style-digest.css", @helper.webpack_bundle_path("style.css")
         assert_equal "https://cdn/images/logo-digest.svg", @helper.webpack_bundle_path("logo.svg")
+        assert_equal "manifest.json", @helper.webpack_bundle_path("manifest.json")
       end
     end
   end

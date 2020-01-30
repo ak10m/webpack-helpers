@@ -39,17 +39,16 @@ if defined?(Rails)
                        view.javascript_bundle_tag("absolute")
           assert_equal %(<script src="https://cdn/remote-digest.js"></script>),
                        view.javascript_bundle_tag("remote")
+          assert_equal %(<script src="/web/pack/vendor.js"></script>),
+                       view.javascript_bundle_tag("vendor")
 
           multiple_expected = <<~EXPECTED.chomp
             <script src="/web/pack/relative-digest.js"></script>
             <script src="/web/pack/bundles/absolute-digest.js"></script>
             <script src="https://cdn/remote-digest.js"></script>
+            <script src="/web/pack/vendor.js"></script>
           EXPECTED
-          assert_equal multiple_expected, view.javascript_bundle_tag("relative", "absolute", "remote")
-
-          assert_raise Webpack::Manifest::Entries::MissingEntryError do
-            view.javascript_bundle_tag("unknown")
-          end
+          assert_equal multiple_expected, view.javascript_bundle_tag("relative", "absolute", "remote", "vendor")
         end
       end
     end
@@ -67,17 +66,16 @@ if defined?(Rails)
                        view.javascript_bundle_tag("absolute")
           assert_equal %(<script src="https://cdn/remote-digest.js"></script>),
                        view.javascript_bundle_tag("remote")
+          assert_equal %(<script src="/javascripts/vendor.js"></script>),
+                       view.javascript_bundle_tag("vendor")
 
           multiple_expected = <<~EXPECTED.chomp
             <script src="/javascripts/relative-digest.js"></script>
             <script src="/bundles/absolute-digest.js"></script>
             <script src="https://cdn/remote-digest.js"></script>
+            <script src="/javascripts/vendor.js"></script>
           EXPECTED
-          assert_equal multiple_expected, view.javascript_bundle_tag("relative", "absolute", "remote")
-
-          assert_raise Webpack::Manifest::Entries::MissingEntryError do
-            view.javascript_bundle_tag("unknown")
-          end
+          assert_equal multiple_expected, view.javascript_bundle_tag("relative", "absolute", "remote", "vendor")
         end
       end
     end
@@ -95,17 +93,16 @@ if defined?(Rails)
                        view.stylesheet_bundle_tag("absolute")
           assert_equal %(<link rel="stylesheet" media="screen" href="https://cdn/remote-digest.css" />),
                        view.stylesheet_bundle_tag("remote")
+          assert_equal %(<link rel="stylesheet" media="screen" href="/web/pack/style.css" />),
+                       view.stylesheet_bundle_tag("style")
 
           multiple_expected = <<~EXPECTED.chomp
             <link rel="stylesheet" media="screen" href="/web/pack/relative-digest.css" />
             <link rel="stylesheet" media="screen" href="/web/pack/bundles/absolute-digest.css" />
             <link rel="stylesheet" media="screen" href="https://cdn/remote-digest.css" />
+            <link rel="stylesheet" media="screen" href="/web/pack/style.css" />
           EXPECTED
-          assert_equal multiple_expected, view.stylesheet_bundle_tag("relative", "absolute", "remote")
-
-          assert_raise Webpack::Manifest::Entries::MissingEntryError do
-            view.stylesheet_bundle_tag("unknown")
-          end
+          assert_equal multiple_expected, view.stylesheet_bundle_tag("relative", "absolute", "remote", "style")
         end
       end
     end
@@ -123,17 +120,16 @@ if defined?(Rails)
                        view.stylesheet_bundle_tag("absolute")
           assert_equal %(<link rel="stylesheet" media="screen" href="https://cdn/remote-digest.css" />),
                        view.stylesheet_bundle_tag("remote")
+          assert_equal %(<link rel="stylesheet" media="screen" href="/stylesheets/style.css" />),
+                       view.stylesheet_bundle_tag("style")
 
           multiple_expected = <<~EXPECTED.chomp
             <link rel="stylesheet" media="screen" href="/stylesheets/relative-digest.css" />
             <link rel="stylesheet" media="screen" href="/bundles/absolute-digest.css" />
             <link rel="stylesheet" media="screen" href="https://cdn/remote-digest.css" />
+            <link rel="stylesheet" media="screen" href="/stylesheets/style.css" />
           EXPECTED
-          assert_equal multiple_expected, view.stylesheet_bundle_tag("relative", "absolute", "remote")
-
-          assert_raise Webpack::Manifest::Entries::MissingEntryError do
-            view.stylesheet_bundle_tag("unknown")
-          end
+          assert_equal multiple_expected, view.stylesheet_bundle_tag("relative", "absolute", "remote", "style")
         end
       end
     end
@@ -151,10 +147,8 @@ if defined?(Rails)
                        view.image_bundle_tag("absolute.svg", alt: "absolute")
           assert_equal %(<img alt="remote" src="https://cdn/remote-digest.svg" />),
                        view.image_bundle_tag("remote.svg", alt: "remote")
-
-          assert_raise Webpack::Manifest::Entries::MissingEntryError do
-            view.image_bundle_tag("unknown.svg")
-          end
+          assert_equal %(<img alt="image" src="/web/pack/image.svg" />),
+                       view.image_bundle_tag("image.svg", alt: "image")
         end
       end
     end
@@ -172,10 +166,8 @@ if defined?(Rails)
                        view.image_bundle_tag("absolute.svg", alt: "absolute")
           assert_equal %(<img alt="remote" src="https://cdn/remote-digest.svg" />),
                        view.image_bundle_tag("remote.svg", alt: "remote")
-
-          assert_raise Webpack::Manifest::Entries::MissingEntryError do
-            view.image_bundle_tag("unknown.svg")
-          end
+          assert_equal %(<img alt="image" src="/images/image.svg" />),
+                       view.image_bundle_tag("image.svg", alt: "image")
         end
       end
     end
