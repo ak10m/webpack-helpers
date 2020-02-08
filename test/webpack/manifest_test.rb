@@ -11,9 +11,11 @@ class Webpack::ManifestTest < Minitest::Test
   end
 
   def test_load_from_remote_file
-    remote_server = RackServerProcess.new(config: fixture_path("files.ru"))
-    remote_server.run do |rs|
-      remote_url = "http://#{rs.host_with_port}/manifest.json"
+    mock_dev_server(fixture_path("files")) do |srv|
+      remote_url = "http://#{srv.host_with_port}/manifest.json"
+      Webpack::Manifest.configure do |c|
+        c.url = remote_url
+      end
       assert_instance_of Webpack::Manifest::Entries, Webpack::Manifest.load(remote_url)
     end
   end
