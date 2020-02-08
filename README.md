@@ -107,6 +107,37 @@ helper.webpack_bundle_path('logo.svg')  # => 'https://cdn/logo-abcd1234.svg'
 helper.webpack_bundle_path('README.md') # => 'README.md'
 ```
 
+### Webpack::Testing::Helper
+
+```ruby
+require "webpack/testing/helper"
+
+Minitest::Test.include Webpack::Testing::Helper if defined? Minitest::Test
+
+class Webpack::SomeTest < Minitest::Test
+  def test_some
+    mock_dev_server('/path/to/mock/files') do |srv|
+      # stub Webpack::DevServer.config
+      Webpack::DevServer.configure do |c|
+        c.url = "http://#{srv.host_with_port}"
+      end
+
+      # stub Webpack::Manifest.config
+      Webpack::Manifest.configure do |c|
+        c.url = "http://#{srv.host_with_port}/manifest.json"
+      end
+
+      # run Rack::Files server (random port)
+      assert_equal "localhost", srv.host
+      assert_equal 65432, srv.port # unused random port
+      assert_equal "localhost:65432", srv.host_with_port
+      assert_equal true, srv.running?
+    end
+  end
+end
+```
+
+
 ### Rails support
 
 By running the Rails generator command, you can generate a file in `config/initializers` to change the default configuration.
